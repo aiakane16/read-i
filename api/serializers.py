@@ -11,9 +11,18 @@ class ChoiceSerializer(serializers.ModelSerializer):
         model = Choice
         fields = ['id','text','question']
 
+# Use dynamic fields
+class DynamicQuestionSerializer(serializers.ModelSerializer):
+    choices = ChoiceSerializer(many=True, read_only=True)
+    answer = AnswerSerializer(read_only=True)
+
+    class Meta:
+        model = Question
+        fields = '__all__'
+        
 class QuestionSerializer(serializers.ModelSerializer):
   choices = ChoiceSerializer(many=True, read_only=True)
-  answer = AnswerSerializer(read_only=True)
+  # answer = AnswerSerializer(read_only=True)
 
   class Meta:
     model = Question

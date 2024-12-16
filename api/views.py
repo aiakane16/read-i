@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from apps.models import Modules, Question, User_Module_Answer, Answer, UserCompletedModules, Users
-from .serializers import ModulesSerializer, QuestionSerializer, UserSerializer
+from .serializers import ModulesSerializer, QuestionSerializer, UserSerializer, DynamicQuestionSerializer
 import json
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
@@ -102,7 +102,7 @@ def get_module_questions(request, module_id: str):
 @api_view(['GET'])
 def get_question(request, question_id: str ):
   question = get_object_or_404(Question, id=question_id)
-  serializer = QuestionSerializer(question, many = False)
+  serializer = DynamicQuestionSerializer(question, many = False)
   return Response(serializer.data)
 
 @api_view(["POST"])

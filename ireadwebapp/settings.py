@@ -190,4 +190,4 @@ AZURE = {
   'SERVICE_REGION': os.environ.get("SERVICE_REGION")
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://read-i.onrender.com/']
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com/', 'http://*.onrender.com/']

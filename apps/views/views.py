@@ -48,6 +48,13 @@ class HomepageView(LoginRequiredMixin, TemplateView):
 
         context["analytics_active"] = True
         context["leaderboard"] = leaderboard_data
+
+            # Points per module
+        module_points = Modules.objects.annotate(
+            total_points=Sum('completed_by_users__user__experience__total_points')
+        ).values('title', 'total_points')
+
+        context["module_points"] = list(module_points)
         return context
 
 
@@ -101,6 +108,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
             'section': student.section,
             'experience': user_experience.total_points,
             'completed_modules': completed_modules_data,
+            'is_authenticated': True,
         }
         context['user'] = student_data
         return context

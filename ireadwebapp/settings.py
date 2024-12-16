@@ -189,3 +189,5 @@ AZURE = {
   'SPEECH_KEY': os.environ.get("SPEECH_KEY"),
   'SERVICE_REGION': os.environ.get("SERVICE_REGION")
 }
+
+CSRF_TRUSTED_ORIGINS = ['https://read-i.onrender.com/']

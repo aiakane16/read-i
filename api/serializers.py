@@ -13,7 +13,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
   choices = ChoiceSerializer(many=True, read_only=True)
-  # answer = AnswerSerializer(read_only=True)
+  answer = AnswerSerializer(read_only=True)
 
   class Meta:
     model = Question

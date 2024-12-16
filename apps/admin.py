@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.contrib.auth.forms import UserCreationForm
 
-from apps.models import Students, Users
+from apps.models import Students, Users, Teachers
 
 
 admin.site.register(Students)
@@ -23,3 +23,8 @@ class UserAdmin(ModelAdmin):
         if form.cleaned_data["password"]:
             obj.set_password(form.cleaned_data["password"])
         super().save_model(request, obj, form, change)
+
+@admin.register(Teachers)
+class TeachersAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+    search_fields = ('user__first_name', 'user__last_name')

@@ -1,0 +1,414 @@
+{% extends 'base.html' %}
+{% load tailwind_filters %}
+
+{% block content %}
+    <div class="min-h-screen bg-gray-50 py-8">
+        <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <!-- Form Title Section -->
+            <div class="mb-8 rounded-lg bg-white p-6 shadow mt-10">
+                <h3 class="text-base font-semibold text-gray-900">New Quiz</h3>
+                <p class="mt-1 text-sm text-gray-500">Create quiz questions and answer options for students here.</p>
+            </div>
+
+            <form method="post" id="dynamic-form" hx-post="{% url 'question_and_answer_form_service' slug=slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="question_count" id="question_count" value="1">
+
+                <!-- Questions Container -->
+                <div id="questions-container">
+                    <!-- Template Question Block -->
+                    <div class="question-block mb-6 rounded-lg bg-white p-6 shadow transition-all duration-300"
+                         id="question_0">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex-1">
+                                <div class="mb-4">
+                                    <div>
+                                        <label for="question"
+                                               class="block text-sm/6 font-medium text-gray-900">Question</label>
+                                        <div class="mt-2">
+                                            <input name="question" id="question" required
+                                                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                                            >
+                                        </div>
+                                        
+                                        <div class="mt-2">
+                                            <label for="points" class="block text-sm font-medium text-gray-700">
+                                                Points (Experience Points)
+                                            </label>
+                                            <input name="points" id="points" type="number" required
+                                                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                                            >
+                                        </div>
+                                        
+                                        <div class="mt-2">
+                                            <label for="question_type" class="block text-sm font-medium text-gray-700">
+                                                Question Type
+                                            </label>
+                                            <select 
+                                                name="question_type" 
+                                                id="question_type" 
+                                                required 
+                                                class="question-type block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm 
+                                                       ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 
+                                                       focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                                            >
+                                                <option value="" disabled selected>Select Question Type</option>
+                                                <option value="multiple_choice">Multiple Choice</option>
+                                                <option value="fill_in_the_blank">Fill in the Blank</option>
+                                                <option value="auditory">Auditory</option>
+                                            </select>
+                                        </div>
+
+
+                                        <!-- Choices Section -->
+                                        <div class="choices-section hidden mt-4">
+                                            <h4 class="font-semibold text-gray-700">Choices</h4>
+                                            <div class="choices-container space-y-4 mt-2"></div>
+
+                                            <button type="button" class="add-choice-btn mt-3 text-sm text-indigo-600 hover:text-indigo-800">
+                                                + Add Choice
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-2 ml-4">
+                                <button type="button"
+                                        class="duplicate-question p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                </button>
+                                <button type="button"
+                                        class="remove-question p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors hidden">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Answers Section -->
+                        <div class="answers-container ml-6 space-y-4">
+                            <div class="answer-block bg-gray-50 p-4 rounded-lg" id="answer_0_0">
+                                <div>
+                                    <label for="answer"
+                                           class="block text-sm/6 font-medium text-gray-900">Answer</label>
+                                    <div class="mt-2">
+                                        <input name="answer" id="answer" required
+                                               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                                        >
+                                    </div>
+                                </div>
+                                <div class="flex justify-end mt-2">
+                                    <button type="button"
+                                            class="remove-answer text-sm text-red-600 hover:text-red-800 hidden">
+                                        Remove Answer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add Answer Button -->
+                        <div class="mt-4 ml-6">
+                            {#                            <button type="button"#}
+                            {#                                    class="add-answer text-sm text-purple-600 hover:text-purple-800 flex items-center">#}
+                            {#                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">#}
+                            {#                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"#}
+                            {#                                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>#}
+                            {#                                </svg>#}
+                            {#                                Add Answer Option#}
+                            {#                            </button>#}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Question Button -->
+                <div class="flex justify-center mt-6">
+                    <button type="button" id="add-question"
+                            class="flex items-center px-3 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Add Question
+                    </button>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end mt-6">
+                    <button type="submit"
+                            class="px-6 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors">
+                        Save Form
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const questionsContainer = document.getElementById('questions-container');
+            const addQuestionBtn = document.getElementById('add-question');
+            const questionCountInput = document.getElementById('question_count');
+            let questionCount = 1;
+
+            function updateQuestionCount() {
+                questionCountInput.value = questionCount;
+                document.querySelectorAll('.remove-question').forEach(btn => {
+                    btn.classList.toggle('hidden', questionCount <= 1);
+                });
+            }
+
+            function createNewQuestion(questionIndex) {
+                const originalQuestion = document.getElementById('question_0');
+                const newQuestion = originalQuestion.cloneNode(true);
+                newQuestion.id = `question_${questionIndex}`;
+
+                // Update question fields
+                updateFormElements(newQuestion, questionIndex);
+
+                // Clear values
+                newQuestion.querySelectorAll('input:not([type="hidden"]), textarea, select').forEach(input => {
+                    input.value = '';
+                });
+
+                // Reset answers container
+                const answersContainer = newQuestion.querySelector('.answers-container');
+                const firstAnswer = answersContainer.querySelector('.answer-block');
+                answersContainer.innerHTML = '';
+                answersContainer.appendChild(updateAnswerBlock(firstAnswer, questionIndex, 0));
+
+                return newQuestion;
+            }
+
+            function updateFormElements(questionBlock, questionIndex) {
+                questionBlock.querySelectorAll('[name^="question"]').forEach(element => {
+                    element.name = `question_${questionIndex}`;  // Unique question name
+                });
+
+                // Update the answer elements similarly
+                questionBlock.querySelectorAll('[name^="answer"]').forEach(element => {
+                    element.name = `answer_${questionIndex}`;  // Unique answers for each question
+                });
+
+                return questionBlock;
+            }
+
+            function updateAnswerBlock(answerBlock, questionIndex, answerIndex) {
+                answerBlock.id = `answer_${questionIndex}_${answerIndex}`;
+
+                // Update answer form elements
+                answerBlock.querySelectorAll('[name^="answer_0_"]').forEach(element => {
+                    const newName = element.name.replace('answer_0_', `answer_${questionIndex}_${answerIndex}_`);
+                    element.name = newName;
+                    if (element.id) {
+                        element.id = element.id.replace('answer_0_', `answer_${questionIndex}_${answerIndex}_`);
+                    }
+                });
+
+                // Update answer labels
+                answerBlock.querySelectorAll('label[for^="answer_0_"]').forEach(label => {
+                    label.htmlFor = label.htmlFor.replace('answer_0_', `answer_${questionIndex}_${answerIndex}_`);
+                });
+
+                return answerBlock;
+            }
+
+            // Add new question
+            addQuestionBtn.addEventListener('click', function () {
+                const newQuestion = createNewQuestion(questionCount);
+                newQuestion.classList.add('opacity-0', 'translate-y-4');
+                questionsContainer.appendChild(newQuestion);
+
+                requestAnimationFrame(() => {
+                    newQuestion.classList.remove('opacity-0', 'translate-y-4');
+                });
+
+                questionCount++;
+                updateQuestionCount();
+            });
+
+            // Duplicate question
+            questionsContainer.addEventListener('click', function (e) {
+                if (e.target.closest('.duplicate-question')) {
+                    const questionBlock = e.target.closest('.question-block');
+                    const newQuestion = createNewQuestion(questionCount);
+
+                    // Copy values from the original question
+                    const originalInputs = questionBlock.querySelectorAll('input:not([type="hidden"]), textarea, select');
+                    const newInputs = newQuestion.querySelectorAll('input:not([type="hidden"]), textarea, select');
+                    originalInputs.forEach((input, index) => {
+                        if (newInputs[index]) {
+                            newInputs[index].value = input.value;
+                        }
+                    });
+
+                    newQuestion.classList.add('opacity-0', 'translate-y-4');
+                    questionBlock.after(newQuestion);
+
+                    requestAnimationFrame(() => {
+                        newQuestion.classList.remove('opacity-0', 'translate-y-4');
+                    });
+
+                    questionCount++;
+                    updateQuestionCount();
+                }
+            });
+
+            // Remove question
+            questionsContainer.addEventListener('click', function (e) {
+                if (e.target.closest('.remove-question')) {
+                    const questionBlock = e.target.closest('.question-block');
+                    questionBlock.classList.add('opacity-0', 'translate-y-4');
+
+                    setTimeout(() => {
+                        questionBlock.remove();
+                        questionCount--;
+                        updateQuestionCount();
+                    }, 300);
+                }
+            });
+
+            // Add answer
+            questionsContainer.addEventListener('click', function (e) {
+                if (e.target.closest('.add-answer')) {
+                    const questionBlock = e.target.closest('.question-block');
+                    const answersContainer = questionBlock.querySelector('.answers-container');
+                    const questionIndex = questionBlock.id.split('_')[1];
+                    const answerCount = answersContainer.children.length;
+
+                    const originalAnswer = answersContainer.querySelector('.answer-block');
+                    const newAnswer = originalAnswer.cloneNode(true);
+
+                    updateAnswerBlock(newAnswer, questionIndex, answerCount);
+
+                    // Clear values
+                    newAnswer.querySelectorAll('input:not([type="hidden"]), textarea, select').forEach(input => {
+                        input.value = '';
+                    });
+
+                    // Show remove button
+                    newAnswer.querySelector('.remove-answer').classList.remove('hidden');
+
+                    newAnswer.classList.add('opacity-0', 'translate-y-4');
+                    answersContainer.appendChild(newAnswer);
+
+                    requestAnimationFrame(() => {
+                        newAnswer.classList.remove('opacity-0', 'translate-y-4');
+                    });
+                }
+            });
+
+            // Remove answer
+            questionsContainer.addEventListener('click', function (e) {
+                if (e.target.closest('.remove-answer')) {
+                    const answerBlock = e.target.closest('.answer-block');
+                    const answersContainer = answerBlock.closest('.answers-container');
+
+                    if (answersContainer.children.length > 1) {
+                        answerBlock.classList.add('opacity-0', 'translate-y-4');
+                        setTimeout(() => {
+                            answerBlock.remove();
+                        }, 300);
+                    }
+                }
+            });
+
+            // Handle question type change
+            questionsContainer.addEventListener('change', function (e) {
+                if (e.target.classList.contains('question-type')) {
+                    const questionBlock = e.target.closest('.question-block');
+                    const choicesSection = questionBlock.querySelector('.choices-section');
+                    // Show choices if multiple choice is selected
+                    if (e.target.value === 'multiple_choice') {
+                        choicesSection.classList.remove('hidden');
+                    } else {
+                        choicesSection.classList.add('hidden');
+                        clearChoices(questionBlock); // Clear choices if not multiple choice
+                    }
+                }
+            });
+
+            // Add new choice
+            questionsContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('add-choice-btn')) {
+                    const questionBlock = e.target.closest('.question-block');
+                    const choicesContainer = questionBlock.querySelector('.choices-container');
+                    const questionIndex = questionBlock.id.split('_')[1];
+                    const choiceCount = choicesContainer.children.length;
+
+                    // Create new choice input with dynamic name
+                    const choiceInput = document.createElement('div');
+                    choiceInput.classList.add('choice-input', 'flex', 'items-center', 'space-x-4');
+                    choiceInput.innerHTML = `
+                        <input name="choice_${questionIndex}_${choiceCount}" type="text" required
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset 
+                                    ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
+                                    focus:ring-indigo-600 sm:text-sm" 
+                            placeholder="Enter choice">
+                        <button type="button" class="remove-choice text-red-600 hover:text-red-800">Remove</button>
+                    `;
+                    choicesContainer.appendChild(choiceInput);
+                }
+            });
+
+            // Remove a choice
+            questionsContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-choice')) {
+                    const choiceInput = e.target.closest('.choice-input');
+                    choiceInput.remove();
+                }
+            });
+
+            function clearChoices(questionBlock) {
+                const choicesContainer = questionBlock.querySelector('.choices-container');
+                choicesContainer.innerHTML = ''; // Clear choices
+            }
+
+            // Form validation
+            document.getElementById('dynamic-form').addEventListener('submit', function (e) {
+                let isValid = true;
+                const requiredInputs = this.querySelectorAll('[required]');
+
+                requiredInputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.classList.add('border-red-500');
+                        input.classList.add('focus:border-red-500');
+                    } else {
+                        input.classList.remove('border-red-500');
+                        input.classList.remove('focus:border-red-500');
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields.');
+                }
+            });
+        });
+
+    </script>
+
+    <style>
+        .question-block {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .answer-block {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .opacity-0 {
+            opacity: 0;
+        }
+
+        .translate-y-4 {
+            transform: translateY(1rem);
+        }
+
+    </style>
+{% endblock %}

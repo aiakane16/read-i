@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% load tailwind_filters %}
+
+{% block content %}
+    <style>
+        .datatable-wrapper .datatable-bottom .datatable-info {
+            font-size: 12px;
+        }
+
+        .datatable-wrapper .datatable-input, .datatable-wrapper .datatable-search .datatable-input {
+            font-size: 12px;
+            padding: 5px 8px;
+        }
+
+        .datatable-wrapper .datatable-top .datatable-dropdown .datatable-selector {
+            font-size: 12px;
+            padding: 5px 8px;
+        }
+
+        .datatable-wrapper .datatable-top .datatable-dropdown {
+            font-size: 12px;
+        }
+    </style>
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 bg-white rounded-lg shadow py-3 px-1.5 mt-14">
+        <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6 mb-10">
+            <div class="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
+                <div class="ml-4 mt-2">
+                    <h3 class="text-base font-semibold text-gray-900">Module Builder</h3>
+                </div>
+                <div class="ml-4 mt-2 flex-shrink-0">
+                    <button type="button" data-modal-target="add-new-module-modal"
+                            data-modal-toggle="add-new-module-modal"
+                            class="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        Add new module
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <table id="pagination-table">
+                <thead>
+                <tr>
+                    <th class="text-xs font-semibold">#</th>
+                    <th class="text-xs font-semibold">
+                            <span class="flex items-center">
+                                Title
+                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </span>
+                    </th>
+                    <th class="text-xs font-semibold">
+                            <span class="flex items-center">
+                                Description
+                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </span>
+                    </th>
+                    <th class="text-xs font-semibold">
+                            <span class="flex items-center">
+                                Level of Difficulty
+                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </span>
+                    </th>
+                    <th class="text-xs font-semibold">
+                            <span class="flex items-center">
+                                Category
+                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </span>
+                    </th>
+                    <th class="text-xs font-semibold">
+                            <span class="flex items-center">
+                                Created By
+                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </span>
+                    </th>
+                    <th class="text-xs font-semibold">
+                            <span class="flex items-center">
+                                Action
+                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                                </svg>
+                            </span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for module in modules %}
+                    <tr>
+                        <td class="text-xs font-medium text-gray-900 whitespace-nowrap">{{ forloop.counter }}</td>
+                        <td class="text-xs whitespace-nowrap">{{ module.title }}</td>
+                        <td class="text-xs whitespace-nowrap">{{ module.description }}</td>
+                        <td class="text-xs">
+                            {% if module.difficulty == "Easy" %}
+                                <span class="inline-flex items-center gap-x-1.5 rounded-full bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700">
+                                  <svg class="h-1.5 w-1.5 fill-blue-500" viewBox="0 0 6 6" aria-hidden="true">
+                                    <circle cx="3" cy="3" r="3"/>
+                                  </svg>
+                                  Easy
+                                </span>
+                            {% elif module.difficulty == "Medium" %}
+                                <span class="inline-flex items-center gap-x-1.5 rounded-full bg-green-100 px-1.5 py-0.5 text-xs font-medium text-green-700">
+                                  <svg class="h-1.5 w-1.5 fill-green-500" viewBox="0 0 6 6" aria-hidden="true">
+                                    <circle cx="3" cy="3" r="3"/>
+                                  </svg>
+                                  Medium
+                                </span>
+                            {% elif module.difficulty == "Hard" %}
+                                <span class="inline-flex items-center gap-x-1.5 rounded-full bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700">
+                                  <svg class="h-1.5 w-1.5 fill-red-500" viewBox="0 0 6 6" aria-hidden="true">
+                                    <circle cx="3" cy="3" r="3"/>
+                                  </svg>
+                                  Hard
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-xs">{{ module.category }}</td>
+                        <td class="text-xs">{{ module.created_by.user.full_name }}</td>
+                        <td class="text-xs">
+                            <div class="flex gap-x-2">
+                                <a href="{% url 'module_detail' slug=module.slug %}"
+                                   class="inline-flex items-center rounded-full text-green-700 bg-green-100 hover:text-green-800 hover:bg-green-200
+                                   px-2 py-0.5 text-xs font-medium cursor-pointer">
+                                    View
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Custom Modals -->
+    <div id="add-new-module-modal" tabindex="-1" aria-hidden="true"
+         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                    <h3 class="text-base font-semibold text-gray-900">
+                        Create new module
+                    </h3>
+                    <a href="/module/builder"
+                       class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                    >
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                             viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </a>
+                </div>
+                <!-- Modal body -->
+                <div id="uploaded-class-lists">
+                    <form method="POST" hx-post="{% url 'add_new_module_service' %}">
+                        {% csrf_token %}
+                        <div class="p-4 md:p-5 space-y-4">
+                            {{ form|crispy }}
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="flex justify-end items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+                            <button type="submit"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center">
+                                Save
+                            </button>
+                            <a href="/module/builder"
+                               class="ms-3 text-xs px-3 py-1.5  font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        if (document.getElementById("pagination-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+            const dataTable = new simpleDatatables.DataTable("#pagination-table", {
+                paging: true,
+                perPage: 5,
+                perPageSelect: [5, 10, 15, 20, 25],
+                sortable: true
+            });
+        }
+
+    </script>
+{% endblock %}
